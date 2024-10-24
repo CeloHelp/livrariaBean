@@ -15,7 +15,7 @@ public class Main {
          dotenv.get("DB_PASSWORD");
     	
         DbFunctions db = new DbFunctions();
-        Connection conn = db.connect_to_db("livrariadb", "postgres", "root");
+        Connection conn = db.connect_to_db("DB_NAME", "DB_USER", "DB_PASSWORD");
 
         if (conn != null) {
             
