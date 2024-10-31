@@ -40,8 +40,8 @@
 
 <h3>JARs Used</h3>
 <ul>
-  <li><a href="https://mvnrepository.com/artifact/javax.faces/javax.faces/2.2.13">javax.faces-2.2.13.jar</a> - JavaServer Faces (JSF) library for building web interfaces.</li>
-  <li><a href="https://jdbc.postgresql.org/download/postgresql-42.7.3.jar">postgresql-42.7.3.jar</a> - JDBC driver for connecting to the PostgreSQL database.</li>
+  <li><a href="https://mvnrepository.com/search?q=javax.faces-2.2.13">javax.faces-2.2.13.jar</a> - JavaServer Faces (JSF) library for building web interfaces.</li>
+  <li><a href="https://mvnrepository.com/artifact/org.postgresql/postgresql/42.7.3">postgresql-42.7.3.jar</a> - JDBC driver for connecting to the PostgreSQL database.</li>
   <li><a href="https://mvnrepository.com/artifact/org.primefaces/primefaces/10.0.0">primefaces-10.0.0.jar</a> - PrimeFaces library for advanced visual components in JSF applications.</li>
 </ul>
 
