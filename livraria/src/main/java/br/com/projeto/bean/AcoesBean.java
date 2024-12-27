@@ -3,189 +3,225 @@ package br.com.projeto.bean;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.PrimeFaces;
 
-@ManagedBean //Anotação utilizada para definir uma classe como um bean gerenciado pelo JSF,
-             //Logo podendo ser utilizada nas páginas JSF através da expression language ex: #{nomeDoBean}
-
-@ViewScoped // Escopo utilizado para a persistência dos Beans nas páginas JSF
+@ManagedBean
+@ViewScoped
 public class AcoesBean implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	 private String isbn;//Armazena o código ISBN do Livro
-	    private LivroBean livroSelecionado;
-	    private LivroDAO livroDAO = new LivroDAO(); //Cria um novo objeto livroDAO
-	    private List<LivroBean> livros; // Lista de livros carregada a partir do banco de dados
-	    private LivroBean selectedLivro;
-	    private int progressoLeitura; // Armazena o progresso de leitura
+    private static final long serialVersionUID = 1L;
 
-	    @ManagedProperty(value = "#{livroBean}") //Injetando os beans do livroBean em outro Bean Para trabalharmos com ele                                                                                 
-	    private LivroBean livroBean;
-	   
+    private String isbn; // Armazena o código ISBN do Livro
+    private String titulo; // Armazena o titulo do livro
+    private LivroBean livroSelecionado; // Livro atualmente selecionado
+    private LivroDAO livroDAO = new LivroDAO(); // DAO para manipulação do banco de dados
+    private List<LivroBean> livros; // Lista de livros carregada a partir do banco de dados
+    private LivroBean selectedLivro; // Livro selecionado na interface
+    private int progressoLeitura; // Progresso de leitura em porcentagem
 
-	    @SuppressWarnings("unused")
-		private List<LivroBean> filteredLivros; // Lista de livros filtrados para pesquisa
+    @ManagedProperty(value = "#{livroBean}") // Injeção do LivroBean
+    private LivroBean livroBean;
 
-	    // ---------- Getters e Setters ----------
-	    public String getIsbn() {
-	        return isbn;
-	    }
+    
+    @SuppressWarnings("unused")
+    private List<LivroBean> filteredLivros;// Lista de livros filtrados para pesquisa
+    
+    
 
-	    public void setIsbn(String isbn) {
-	        this.isbn = isbn;
-	        if (isbn != null && !isbn.isEmpty()) {
-	            this.livroSelecionado = livroDAO.buscarLivroPorIsbn(isbn);
-	            if (this.livroSelecionado == null) {
-	                FacesContext.getCurrentInstance().addMessage(null,
-	                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Livro não encontrado!", null));
-	            } else {
-	                calcularProgresso(); // Calcular o progresso automaticamente ao carregar o livro
-	            }
-	        } else {
-	            FacesContext.getCurrentInstance().addMessage(null,
-	                new FacesMessage(FacesMessage.SEVERITY_ERROR, "ISBN inválido!", null));
-	        }
-	    }
+    // ---------- Inicialização ----------
 
-	    public LivroBean getLivroSelecionado() {
-	        return livroSelecionado;
-	    }
+    @PostConstruct
+    public void init() {
+        System.out.println("Inicializando AcoesBean e carregando os livros...");
+        livros = livroDAO.listarLivros(); // Chamada ao DAO para buscar os livros
+        if (livros == null || livros.isEmpty()) {
+            System.out.println("Nenhum livro encontrado no banco de dados.");
+        } else {
+            System.out.println("Livros carregados: " + livros.size());
+            livros.forEach(livro -> System.out.println("Título: " + livro.getTitulo()));
+        }
+    }
 
-	    public void setLivroSelecionado(LivroBean livroSelecionado) {
-	        this.livroSelecionado = livroSelecionado;
-	    }
+    // ---------- Getters e Setters ----------  
+    public LivroBean getLivroBean() {
+    	return livroBean;
+    }
+    
+    public void setLivroBean(LivroBean livroBean) {
+    	System.out.println("Injetando LivroBean");
+        this.livroBean = livroBean;
+    }
+    
+    public String getIsbn() {
+        return isbn;
+    }
+    
+    public String getTitulo() {
+		return titulo;
+	}
+    
+    public void setTitulo(String titulo) {
+    	this.titulo = titulo;
+    }
 
-	    public void setLivroBean(LivroBean livroBean) {
-	        this.livroBean = livroBean;
-	    }
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+        if (isbn != null && !isbn.isEmpty()) {
+            this.livroSelecionado = livroDAO.buscarLivroPorIsbn(isbn);
+            if (this.livroSelecionado == null) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Livro não encontrado!", null));
+            } else {
+                calcularProgresso(); // Calcular o progresso automaticamente ao carregar o livro
+            }
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "ISBN inválido!", null));
+        }
+    }
 
-	    public List<LivroBean> getLivros() {
-	        return livros;
-	    }
+    public LivroBean getLivroSelecionado() {
+        return livroSelecionado;
+    }
 
-	    public void setFilteredLivros(List<LivroBean> filteredLivros) {
-	        this.filteredLivros = filteredLivros;
-	    }
+    public void setLivroSelecionado(LivroBean livroSelecionado) {
+        this.livroSelecionado = livroSelecionado;
+    }
 
-	    public LivroBean getSelectedLivro() {
-	        return selectedLivro;
-	    }
+   
 
-	    public void setSelectedLivro(LivroBean selectedLivro) {
-	        this.selectedLivro = selectedLivro;
-	    }
+    public List<LivroBean> getLivros() {
+        return livros;
+    }
 
-	    public boolean isHasSelectedBooks() {
-	        return selectedLivro != null;
-	    }
+    public void setFilteredLivros(List<LivroBean> filteredLivros) {
+        this.filteredLivros = filteredLivros;
+    }
 
-	    // --------- Métodos ----------
-	    @PostConstruct
-	    public void init() {
-	        livros = livroDAO.listarLivros();
-	    }
+    public LivroBean getSelectedLivro() {
+        return selectedLivro;
+    }
 
-	    // Método para salvar o livro
-	    public String acaoSalvar() {
-	        try {
-	            livroDAO.salvar(livroBean);
-	            
-	            livroBean = new LivroBean();
-	            return "resultado";
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	            return null;
-	        }
-	    }
+    public void setSelectedLivro(LivroBean selectedLivro) {
+        this.selectedLivro = selectedLivro;
+    }
 
-	    // Navegar para a página de livros cadastrados
-	    public String acaoProximaPagina() {
-	        return "meusLivros?faces-redirect=true";
-	    }
+    public boolean isHasSelectedBooks() {
+        return selectedLivro != null;
+    }
 
-	    // Método para excluir um livro
-	    public void acaoExcluirLivro(String isbn) {
-	        try {
-	            livroDAO.excluirLivro(isbn);
-	            livros = livroDAO.listarLivros();  // Atualizar a lista de livros
-	            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Livro excluído com sucesso!", null));
-	        } catch (Exception e) {
-	            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao excluir livro", null));
-	        }
-	    }
+    public int getProgressoLeitura() {
+        return progressoLeitura;
+    }
 
-	    // Atualizar o progresso de leitura e recalcular o progresso
-	    public void acaoAtualizarProgressoLeitura() {
-	        if (livroSelecionado != null) {
-	            try {
-	                livroDAO.atualizarProgressoLeitura(livroSelecionado);
-	                FacesContext.getCurrentInstance().addMessage(null,
-	                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Progresso atualizado com sucesso!", null));
-	                calcularProgresso(); // Recalcular o progresso após atualizar
-	            } catch (Exception e) {
-	                FacesContext.getCurrentInstance().addMessage(null,
-	                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao atualizar progresso de leitura", null));
-	                e.printStackTrace();
-	            }
-	        } else {
-	            FacesContext.getCurrentInstance().addMessage(null,
-	                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Livro não selecionado", null));
-	        }
-	    }
+    // ---------- Métodos ----------
+    
+    public String acaoSalvar() {
+    	System.out.println("Chamando acaoSalvar");
+    	if(livroBean != null) {
+    		System.out.println("Livro sendo salvo: " + livroBean.getTitulo());
+    	}else {
+    		System.out.println("LivroBean Nulo ");
+    	}
+        try {
+            livroDAO.salvar(livroBean);
+            livroBean = new LivroBean();
+            return "meusLivros?faces-redirect=true";
+        } catch (Exception e) {
+        	System.out.println("Erro ao salvar Livro:" + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    } 
+    
+    
+    public String acaoProximaPagina() {
+        return "meusLivros?faces-redirect=true";
+    }
 
-	    // Calcular o progresso de leitura em porcentagem
-	    public void calcularProgresso() {
-	        if (livroSelecionado != null && livroSelecionado.getPaginaAtual() > 0 && livroSelecionado.getPaginasTotais() > 0) {
-	        	if (livroSelecionado.getPaginaAtual() > livroSelecionado.getPaginasTotais()) {
-	        		livroSelecionado.setPaginaAtual(livroSelecionado.getPaginasTotais());
-	        		this.progressoLeitura = 100;// trava o progresso em 100% se as páginas lidas forem maiores que o total
-	        		
-	        		// Chama o comando remoto para exibir o diálogo
-	                PrimeFaces.current().executeScript("mostrarDialogLimite()");
-	        		
-	        	} else {
-	        		this.progressoLeitura = (livroSelecionado.getPaginaAtual()* 100) / livroSelecionado.getPaginasTotais();
-	        	}
-	        }else {
-	        		this.progressoLeitura = 0; // Se não houver páginas lidas ou o total de páginas for 0
-	        	}
-	        }
-	         
+    public void acaoExcluirLivro(String isbn) {
+        try {
+            livroDAO.excluirLivro(isbn);
+            livros = livroDAO.listarLivros(); // Atualiza a lista após exclusão
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_INFO, "Livro excluído com sucesso!", null));
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao excluir livro", null));
+        }
+    }
 
-	    // Getter para o progresso
-	    public int getProgressoLeitura() {
-	        return progressoLeitura;
-	    }
+    public void acaoAtualizarProgressoLeitura() {
+        if (livroSelecionado != null) {
+            try {
+                livroDAO.atualizarProgressoLeitura(livroSelecionado);
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_INFO, "Progresso atualizado com sucesso!", null));
+                calcularProgresso();
+            } catch (Exception e) {
+                FacesContext.getCurrentInstance().addMessage(null,
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao atualizar progresso de leitura", null));
+                e.printStackTrace();
+            }
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Livro não selecionado", null));
+        }
+    }
 
-	    // Navegar para mais detalhes do livro
-	    public String acaoMaisDetalhes(String isbn) {
-	        return "detalhesLivro?faces-redirect=true&amp;isbn=" + isbn;
-	    }
+    public void calcularProgresso() {
+        if (livroSelecionado != null && livroSelecionado.getPaginaAtual() > 0
+                && livroSelecionado.getPaginasTotais() > 0) {
+            if (livroSelecionado.getPaginaAtual() > livroSelecionado.getPaginasTotais()) {
+                livroSelecionado.setPaginaAtual(livroSelecionado.getPaginasTotais());
+                this.progressoLeitura = 100; // Trava o progresso em 100%
+                PrimeFaces.current().executeScript("mostrarDialogLimite()");
+            } else {
+                this.progressoLeitura = (livroSelecionado.getPaginaAtual() * 100) / livroSelecionado.getPaginasTotais();
+            }
+        } else {
+            this.progressoLeitura = 0; // Nenhum progresso se as páginas lidas forem zero
+        }
+    }
 
-	    // Filtro global nos livros
-	    public boolean globalFilterFunction(LivroBean livro, Object filter, Locale locale) {
-	        String filterText = (filter == null) ? null : filter.toString().trim().toLowerCase(locale);
-	        if (filterText == null || filterText.isEmpty()) {
-	            return true;
-	        }
-	        return (livro.getTitulo() != null && livro.getTitulo().toLowerCase(locale).contains(filterText))
-	                || (livro.getAutor() != null && livro.getAutor().toLowerCase(locale).contains(filterText))
-	                || (livro.getIsbn() != null && livro.getIsbn().toLowerCase(locale).contains(filterText))
-	                || (livro.getPreco() != null && String.valueOf(livro.getPreco()).toLowerCase(locale).contains(filterText));
-	    }
-	
+    public String acaoMaisDetalhes(String isbn) {
+        return "detalhesLivro?faces-redirect=true&amp;isbn=" + isbn;
+    }
 
-
-
-
+    public boolean globalFilterFunction(LivroBean livro, Object filter, Locale locale) {
+        String filterText = (filter == null) ? null : filter.toString().trim().toLowerCase(locale);
+        if (filterText == null || filterText.isEmpty()) {
+            return true;
+        }
+        return (livro.getTitulo() != null && livro.getTitulo().toLowerCase(locale).contains(filterText))
+                || (livro.getAutor() != null && livro.getAutor().toLowerCase(locale).contains(filterText))
+                || (livro.getIsbn() != null && livro.getIsbn().toLowerCase(locale).contains(filterText))
+                || (livro.getPreco() != null && String.valueOf(livro.getPreco()).toLowerCase(locale).contains(filterText));
+    }
+    
+    
+    public List<String> completeTitulo(String query){
+    	
+    	String filterText = (query == null) ? "" : query.trim().toLowerCase(Locale.getDefault());
+    	
+    	return livroDAO.listarLivros().stream()
+    			.filter(livro -> livro.getTitulo() != null && livro.getTitulo().toLowerCase().contains(filterText))
+    			.map(LivroBean :: getTitulo)
+    			.collect(Collectors.toList());
+    	
+    }
+    	
+    
+                                         
 }
-

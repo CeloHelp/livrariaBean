@@ -73,6 +73,8 @@ public class LivroDAO {
 				
 
 				livros.add(livro);
+				
+				
 
 			}
 		} catch (SQLException e) {
