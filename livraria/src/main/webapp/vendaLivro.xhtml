@@ -1,48 +1,54 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
-      
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
 
- <h:head>
-    <link rel="stylesheet" type="text/css" href="./resources/css/Style.css"/>
-    <title>Store</title>
+
+<h:head>
+	<link rel="stylesheet" type="text/css" href="./resources/css/Style.css" />
+	<title>Store</title>
 </h:head>
-   <h:body style="Background-color:#FFF8E8 " >
-    <h1 style="font-size: 2.5rem;
-	color: #008080; 
-	text-align: center;
-	letter-spacing: 0.4rem;
-	font-family: 'Chakra Petch', sans-serif;" >Compre e Venda Livros!</h1>
-    <br></br>
-    
-    <h:form>
-        <p:commandButton value="Pagina Inicial" icon="pi pi-bookmark" styleClass="ui-button-primary"
-                         action="paginaInicial?faces-redirect=true"
-                         style="background-color: #43766C;
+<h:body style="Background-color:#FFF8E8 ">
+	<h1
+		style="font-size: 2.5rem; color: #008080; text-align: center; letter-spacing: 0.4rem; font-family: 'Chakra Petch', sans-serif;">Compre
+		e Venda Livros!</h1>
+	<br></br>
+
+	<h:form>
+		<div>
+		<p:commandButton value="Pagina Inicial" icon="pi pi-bookmark"
+			styleClass="ui-button-primary"
+			action="paginaInicial?faces-redirect=true"
+			style="background-color: #43766C;
                          float: right;
                          margin-top: 20px;" />
-                         
-                         
-                         
-                         <div class="field col-12 md:col-4">
-                         <p:outputLabel value="Título do Livro " for="autocompleteTitulo" />
-        
-                         <p:autoComplete id="autocompleteTitulo"
-                                     value="#{acoesBean.titulo}" 
-                                     completeMethod="#{acoesBean.completeTitulo}" 
-                                     dropdown="true" 
-                                     scrollHeight="250"
-                                     placeholder="Digite o título do livro  " />
-                                     
-                                     
-                         </div>        
+</div>
 
-    
-    
-    </h:form>
-    
-    
-    </h:body>
+
+		<!-- Autocomplete para seleção do título -->
+		<p:autoComplete id="autocompleteTitulo"
+                value="#{acoesBean.tituloSelecionado}"
+                completeMethod="#{acoesBean.completeTitulo}" 
+                dropdown="true"
+                scrollHeight="250"
+                placeholder="Digite o título do livro..."
+                />
+		
+
+		<!-- Painel condicional para exibir os detalhes -->
+		<p:panel header="Detalhes do Livro"
+			rendered="#{acoesBean.livroCompleteSelecionado}">
+			<h:outputText value="Título: #{acoesBean.livroDetalhes.titulo}" />
+			<br />
+			<h:outputText value="Autor: #{acoesBean.livroDetalhes.autor}" />
+			<br />
+			<h:outputText value="ISBN: #{acoesBean.livroDetalhes.isbn}" />
+			<br />
+       </p:panel>
+			
+	</h:form>
+
+
+</h:body>
 </html>

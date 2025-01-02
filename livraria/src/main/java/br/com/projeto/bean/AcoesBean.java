@@ -29,6 +29,9 @@ public class AcoesBean implements Serializable {
     private List<LivroBean> livros; // Lista de livros carregada a partir do banco de dados
     private LivroBean selectedLivro; // Livro selecionado na interface
     private int progressoLeitura; // Progresso de leitura em porcentagem
+    private String tituloSelecionado;  // Título selecionado no autocomplete
+    private LivroBean livroDetalhes; // Detalhes do livro selecionado
+    private boolean livroCompleteSelecionado; // Flag para controle da exibição
 
     @ManagedProperty(value = "#{livroBean}") // Injeção do LivroBean
     private LivroBean livroBean;
@@ -54,6 +57,8 @@ public class AcoesBean implements Serializable {
     }
 
     // ---------- Getters e Setters ----------  
+    
+    
     public LivroBean getLivroBean() {
     	return livroBean;
     }
@@ -124,6 +129,29 @@ public class AcoesBean implements Serializable {
     public int getProgressoLeitura() {
         return progressoLeitura;
     }
+    
+    public String getTituloSelecionado() {
+        return tituloSelecionado;
+    }
+
+    public void setTituloSelecionado(String tituloSelecionado) {
+        this.tituloSelecionado = tituloSelecionado;
+    }
+    
+    public LivroBean getLivroDetalhes() {
+        return livroDetalhes;
+    }
+
+    public boolean isLivroCompleteSelecionado() {
+		return livroCompleteSelecionado;
+	}
+
+	public void setLivroCompleteSelecionado(boolean livroCompleteSelecionado) {
+		this.livroCompleteSelecionado = livroCompleteSelecionado;
+	}
+    
+    
+	
 
     // ---------- Métodos ----------
     
@@ -217,11 +245,28 @@ public class AcoesBean implements Serializable {
     	
     	return livroDAO.listarLivros().stream()
     			.filter(livro -> livro.getTitulo() != null && livro.getTitulo().toLowerCase().contains(filterText))
-    			.map(LivroBean :: getTitulo)
+    			.map(LivroBean :: getTitulo) // Extrair apenas os títulos
     			.collect(Collectors.toList());
     	
     }
+    
+    public void buscarDetalhesLivro() {
+    	if (tituloSelecionado != null && !tituloSelecionado.isEmpty()) {
+    		livroDetalhes = livroDAO.listarLivros().stream()
+    				.filter(livro -> livro.getTitulo().equals(tituloSelecionado))
+    				.findFirst()
+    				.orElse(null);
+    		livroCompleteSelecionado = (livroDetalhes != null);
+    	}else {
+    		livroCompleteSelecionado = false;
+    		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nenhum título selecionado!", null));
     	
+    	}
+    }
+
+	
+    
+  
     
                                          
 }
