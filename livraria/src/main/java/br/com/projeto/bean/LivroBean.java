@@ -3,7 +3,6 @@ package br.com.projeto.bean;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -16,15 +15,6 @@ public class LivroBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	
-	
-	
-	 public LivroBean() {
-	        System.out.println("LivroBean inicializado.");
-	        
-	    }
-
-	private int id;
 	private String titulo;
 	private String autor;
 	private String isbn;
@@ -35,14 +25,6 @@ public class LivroBean implements Serializable {
 	private int paginasTotais;
 
 	// Getters e Setters
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-	
 	public String getTitulo() {
 		return titulo;
 	}
@@ -60,12 +42,10 @@ public class LivroBean implements Serializable {
 	}
 
 	public String getIsbn() {
-		System.out.println("Obtendo ISBN: " + isbn);
 		return isbn;
 	}
 
 	public void setIsbn(String isbn) {
-		System.out.println("ISBN Definido: " + isbn);
 		this.isbn = isbn;
 	}
 
@@ -114,9 +94,5 @@ public class LivroBean implements Serializable {
 		System.out.println("Livro salvo: " + titulo);
 		return "confirmacao";
 	}
-	
-	
-	
 
 }
-

@@ -3,14 +3,11 @@ package br.com.projeto.bean;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
@@ -23,24 +20,17 @@ public class AcoesBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String isbn; // Armazena o código ISBN do Livro
-    private String titulo; // Armazena o titulo do livro
     private LivroBean livroSelecionado; // Livro atualmente selecionado
     private LivroDAO livroDAO = new LivroDAO(); // DAO para manipulação do banco de dados
     private List<LivroBean> livros; // Lista de livros carregada a partir do banco de dados
     private LivroBean selectedLivro; // Livro selecionado na interface
     private int progressoLeitura; // Progresso de leitura em porcentagem
-    private String tituloSelecionado;  // Título selecionado no autocomplete
-    private LivroBean livroDetalhes; // Detalhes do livro selecionado
-    private boolean livroCompleteSelecionado; // Flag para controle da exibição
 
     @ManagedProperty(value = "#{livroBean}") // Injeção do LivroBean
     private LivroBean livroBean;
 
-    
     @SuppressWarnings("unused")
-    private List<LivroBean> filteredLivros;// Lista de livros filtrados para pesquisa
-    
-    
+    private List<LivroBean> filteredLivros; // Lista de livros filtrados para pesquisa
 
     // ---------- Inicialização ----------
 
@@ -56,28 +46,9 @@ public class AcoesBean implements Serializable {
         }
     }
 
-    // ---------- Getters e Setters ----------  
-    
-    
-    public LivroBean getLivroBean() {
-    	return livroBean;
-    }
-    
-    public void setLivroBean(LivroBean livroBean) {
-    	System.out.println("Injetando LivroBean");
-        this.livroBean = livroBean;
-    }
-    
+    // ---------- Getters e Setters ----------
     public String getIsbn() {
         return isbn;
-    }
-    
-    public String getTitulo() {
-		return titulo;
-	}
-    
-    public void setTitulo(String titulo) {
-    	this.titulo = titulo;
     }
 
     public void setIsbn(String isbn) {
@@ -104,7 +75,9 @@ public class AcoesBean implements Serializable {
         this.livroSelecionado = livroSelecionado;
     }
 
-   
+    public void setLivroBean(LivroBean livroBean) {
+        this.livroBean = livroBean;
+    }
 
     public List<LivroBean> getLivros() {
         return livros;
@@ -129,51 +102,20 @@ public class AcoesBean implements Serializable {
     public int getProgressoLeitura() {
         return progressoLeitura;
     }
-    
-    public String getTituloSelecionado() {
-        return tituloSelecionado;
-    }
-
-    public void setTituloSelecionado(String tituloSelecionado) {
-        this.tituloSelecionado = tituloSelecionado;
-    }
-    
-    public LivroBean getLivroDetalhes() {
-        return livroDetalhes;
-    }
-
-    public boolean isLivroCompleteSelecionado() {
-		return livroCompleteSelecionado;
-	}
-
-	public void setLivroCompleteSelecionado(boolean livroCompleteSelecionado) {
-		this.livroCompleteSelecionado = livroCompleteSelecionado;
-	}
-    
-    
-	
 
     // ---------- Métodos ----------
     
     public String acaoSalvar() {
-    	System.out.println("Chamando acaoSalvar");
-    	if(livroBean != null) {
-    		System.out.println("Livro sendo salvo: " + livroBean.getTitulo());
-    	}else {
-    		System.out.println("LivroBean Nulo ");
-    	}
         try {
             livroDAO.salvar(livroBean);
             livroBean = new LivroBean();
-            return "meusLivros?faces-redirect=true";
+            return "resultado";
         } catch (Exception e) {
-        	System.out.println("Erro ao salvar Livro:" + e.getMessage());
             e.printStackTrace();
             return null;
         }
-    } 
-    
-    
+    }
+
     public String acaoProximaPagina() {
         return "meusLivros?faces-redirect=true";
     }
@@ -237,36 +179,4 @@ public class AcoesBean implements Serializable {
                 || (livro.getIsbn() != null && livro.getIsbn().toLowerCase(locale).contains(filterText))
                 || (livro.getPreco() != null && String.valueOf(livro.getPreco()).toLowerCase(locale).contains(filterText));
     }
-    
-    
-    public List<String> completeTitulo(String query){
-    	
-    	String filterText = (query == null) ? "" : query.trim().toLowerCase(Locale.getDefault());
-    	
-    	return livroDAO.listarLivros().stream()
-    			.filter(livro -> livro.getTitulo() != null && livro.getTitulo().toLowerCase().contains(filterText))
-    			.map(LivroBean :: getTitulo) // Extrair apenas os títulos
-    			.collect(Collectors.toList());
-    	
-    }
-    
-    public void buscarDetalhesLivro() {
-    	if (tituloSelecionado != null && !tituloSelecionado.isEmpty()) {
-    		livroDetalhes = livroDAO.listarLivros().stream()
-    				.filter(livro -> livro.getTitulo().equals(tituloSelecionado))
-    				.findFirst()
-    				.orElse(null);
-    		livroCompleteSelecionado = (livroDetalhes != null);
-    	}else {
-    		livroCompleteSelecionado = false;
-    		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Nenhum título selecionado!", null));
-    	
-    	}
-    }
-
-	
-    
-  
-    
-                                         
 }
