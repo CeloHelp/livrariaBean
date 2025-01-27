@@ -64,19 +64,23 @@
                 </span>
                 <p:message for="autor" />
             </div>
-            
-            <div style=" display: flex;
-                         justify-content: center; 
-                         align-items: center;    
-                         height: 70px;">
-                <span class="ui-float-label"> 
-                    <p:inputText id="isbn" value="#{livroBean.isbn}" required="true" requiredMessage="Campo Obrigatório" />
-                    <p:outputLabel for="autor" value="ISBN-10:" />
-                </span>
-                <p:message for="autor" />
-            </div>
 
-            
+            <div style="display: flex;
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: center;     /* Centraliza verticalmente */
+    height: 70px;">
+                <span class="ui-float-label">
+                    <!-- Input para o ISBN -->
+                    <p:inputText id="isbn" value="#{livroBean.isbn}" maxlength="10" required="true" requiredMessage="Campo Obrigatório">
+                        <!-- Corrigindo a tag de validação -->
+                        <f:validateRegex pattern="^[0-9]{1,10}$" />
+                    </p:inputText>
+                    <!-- Label associado ao input de ISBN -->
+                    <p:outputLabel for="isbn" value="ISBN-10:" />
+                </span>
+                <!-- Mensagem de validação -->
+                <p:message for="isbn" />
+            </div>
 
             <div style="display: flex;
     justify-content: center; /* Centraliza horizontalmente */
@@ -104,7 +108,7 @@
             <p:commandButton value="Salvar Livro" icon="pi pi-bookmark"
                              style="background-color:  #43766C;
                              margin-left: 530px;"
-              action="#{acoesBean.acaoSalvar}" update="@form" process="@form" resetValues="true"
+              action="#{acoesBean.acaoSalvar}" update="@form" process="@form" 
               oncomplete="if (args.validationFailed)  { PF('campoObrigatorioDialog').show('Não foi possível cadastrar o livro'); } else { alert('Livro Cadastrado com sucesso'); }" />
             
             

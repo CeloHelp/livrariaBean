@@ -130,3 +130,108 @@
 .custom-progress-bar .ui-progressbar-value {
     background-color: #43766C !important;
 }
+
+
+.custom-panel {
+    border-radius: 10px; /* Bordas arredondadas */
+    background-color: #f9f9f9; /* Fundo cinza claro */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra leve */
+    padding: 20px; /* Espaçamento interno */
+    margin-top: 20px; /* Espaçamento acima do painel */
+    border: 1px solid #ddd; /* Borda fina */
+    font-family: 'Arial', sans-serif; /* Fonte personalizada */
+}
+
+.custom-panel .ui-panel-titlebar {
+    background-color: #4caf50; /* Cor de fundo do cabeçalho */
+    color: white; /* Cor do texto do cabeçalho */
+    font-weight: bold; /* Texto em negrito */
+    text-align: center; /* Alinhamento centralizado */
+    padding: 10px; /* Espaçamento interno */
+    border-radius: 10px 10px 0 0; /* Bordas arredondadas no topo */
+}
+
+.custom-panel h:outputText {
+    font-size: 1.2rem; /* Aumenta o tamanho do texto */
+    margin-bottom: 5px; /* Espaçamento entre as linhas */
+    color: #333; /* Cor do texto */
+}
+
+/* Estiliza o contêiner do autoComplete */
+.custom-autocomplete {
+    width: 100%; /* Largura total */
+    max-width: 400px; /* Largura máxima */
+    margin: 0 auto; /* Centraliza o elemento */
+    border: 1px solid #ddd; /* Borda cinza clara */
+    border-radius: 8px; /* Bordas arredondadas */
+    background-color: #f9f9f9; /* Fundo claro */
+    padding: 10px; /* Espaçamento interno */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    font-family: Arial, sans-serif; /* Fonte personalizada */
+}
+
+/* Estiliza o menu suspenso de sugestões */
+.ui-autocomplete-panel {
+    border: 1px solid #ccc; /* Borda do menu */
+    border-radius: 8px; /* Bordas arredondadas */
+    background-color: #ffffff; /* Fundo branco */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+    padding: 5px; /* Espaçamento interno */
+    max-height: 250px; /* Altura máxima do menu */
+    overflow-y: auto; /* Adiciona rolagem se necessário */
+}
+
+/* Estiliza os itens da lista */
+.ui-autocomplete-items .ui-menuitem {
+    padding: 8px 12px; /* Espaçamento interno dos itens */
+    font-size: 14px; /* Tamanho da fonte */
+    cursor: pointer; /* Aponta como botão ao passar o mouse */
+}
+
+/* Estilo ao passar o mouse sobre os itens */
+.ui-autocomplete-items .ui-menuitem:hover {
+    background-color: #e0f7fa; /* Fundo azul claro */
+    color: #00796b; /* Texto verde escuro */
+}
+
+/* Estiliza a seta do dropdown */
+.ui-autocomplete-dropdown {
+    background-color: #008080 !important; /* Cor de fundo da seta */
+    border: 1px solid #005050; /* Borda ao redor da seta */
+    color: white; /* Cor do ícone da seta */
+    width: 30px; /* Largura do botão de dropdown */
+    height: 30px; /* Altura do botão de dropdown */
+    border-radius: 5px; /* Bordas arredondadas */
+}
+
+/* Muda a cor ao passar o mouse na seta */
+.ui-autocomplete-dropdown:hover {
+    background-color: #00b3b3 !important; /* Fundo mais claro ao passar o mouse */
+    color: white; /* Cor do ícone */
+}
+
+.botao-comprar {
+    background-color: #ff9800 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 10px 15px !important;
+    font-size: 14px !important;
+    font-weight: bold !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.botao-comprar:hover {
+    background-color: #e68900 !important;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2) !important;
+}
+
+.botao-comprar .ui-button-icon-left {
+    color: white !important;
+    margin-right: 8px !important;
+}
+
+
+
+

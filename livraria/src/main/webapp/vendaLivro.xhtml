@@ -15,37 +15,54 @@
 		e Venda Livros!</h1>
 	<br></br>
 
-	<h:form>
-		<div>
-		<p:commandButton value="Pagina Inicial" icon="pi pi-bookmark"
-			styleClass="ui-button-primary"
-			action="paginaInicial?faces-redirect=true"
-			style="background-color: #43766C;
+	<h:form> 
+	   
+	   <div>
+	   
+	      <p:commandButton value="Pagina Inicial" icon="pi pi-bookmark" styleClass="ui-button-primary"
+                         action="paginaInicial?faces-redirect=true"
+                         
+                         style="background-color: #43766C;
                          float: right;
                          margin-top: 20px;" />
-</div>
+	   
+	   
+	   </div>
+	   
 
-
+	    
+ <div>
+     <h:panelGroup>
 		<!-- Autocomplete para seleção do título -->
 		<p:autoComplete id="autocompleteTitulo"
                 value="#{acoesBean.tituloSelecionado}"
                 completeMethod="#{acoesBean.completeTitulo}" 
                 dropdown="true"
                 scrollHeight="250"
-                placeholder="Digite o título do livro..."
-                />
+                placeholder="Digite o título do livro"
+                styleClass="custom-autocomplete">
+               <p:ajax event="itemSelect" listener="#{acoesBean.buscarDetalhesLivro}" update="painelDetalhes" />
+                 </p:autoComplete>
+		</h:panelGroup>
+	
 		
-
+     <h:panelGroup>
 		<!-- Painel condicional para exibir os detalhes -->
-		<p:panel header="Detalhes do Livro"
-			rendered="#{acoesBean.livroCompleteSelecionado}">
+		<p:panel id="painelDetalhes" header="Detalhes do Livro"
+			rendered="#{acoesBean.livroCompleteSelecionado}"
+			styleClass="custom-panel">
 			<h:outputText value="Título: #{acoesBean.livroDetalhes.titulo}" />
 			<br />
 			<h:outputText value="Autor: #{acoesBean.livroDetalhes.autor}" />
 			<br />
 			<h:outputText value="ISBN: #{acoesBean.livroDetalhes.isbn}" />
 			<br />
+			<h:outputText value="Preço: #{acoesBean.livroDetalhes.preco} R$"/>
        </p:panel>
+     </h:panelGroup> 
+       
+ </div>     
+    
 			
 	</h:form>
 
