@@ -293,6 +293,7 @@ public class AcoesBean implements Serializable {
                 System.out.println("Autor: " + livroDetalhes.getAutor());
                 System.out.println("ISBN: " + livroDetalhes.getIsbn());
                 System.out.println("Preço: " + livroDetalhes.getPreco());
+                System.out.println("Imagem: " + livroDetalhes.getImagem());
                 livroCompleteSelecionado = true; // Atualiza a flag para exibir o painel
             } else {
                 System.out.println("Livro não encontrado para o título: " + tituloSelecionado);
