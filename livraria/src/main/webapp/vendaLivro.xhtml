@@ -1,91 +1,114 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://xmlns.jcp.org/jsf/html"
-	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
-
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
 
 <h:head>
-	<link rel="stylesheet" type="text/css" href="./resources/css/Style.css" />
-	<title>Store</title>
+    <link rel="stylesheet" type="text/css" href="./resources/css/Style.css"/>
+    <title>Store</title>
 </h:head>
-<h:body style="Background-color:#FFF8E8 ">
-	<h1
-		style="font-size: 2.5rem; color: #008080; text-align: center; letter-spacing: 0.4rem; font-family: 'Chakra Petch', sans-serif;">Compre
-		e Venda Livros!</h1>
-	<br></br>
 
-	<h:form> 
-	   
-	   <div>
-	   
-	      <p:commandButton value="Pagina Inicial" icon="pi pi-bookmark" styleClass="ui-button-primary"
-                         action="paginaInicial?faces-redirect=true"
-                         
-                         style="background-color: #43766C;
-                         float: right;
-                         margin-top: 20px;" />
-	   
-	   
-	   </div>
-	   
+<h:body style="background-color:#FFF8E8;">
+    <h1 style="font-size: 2.5rem; color: #008080; text-align: center; letter-spacing: 0.4rem; font-family: 'Chakra Petch', sans-serif;">
+        Compre e Venda Livros!
+    </h1>
 
-	    
- <div>
-     
-		<div>
-    <h:panelGroup>
+    <br/>
+    <h:form id="cabecalho">
+         <h:panelGroup>
         <!-- Autocomplete para seleção do título -->
-        <div class="container-centralized-shop">
-            <div class="book-card-details">
+        <div class="custom-autocomplete-left">
+            
                 <p:autoComplete id="autocompleteTitulo"
                                 value="#{acoesBean.tituloSelecionado}"
                                 completeMethod="#{acoesBean.completeTitulo}" 
                                 dropdown="true"
                                 scrollHeight="250"
                                 placeholder="Digite o título do livro"
-                                styleClass="custom-autocomplete">
-                    <p:ajax event="itemSelect" 
-                            listener="#{acoesBean.buscarDetalhesLivro}" 
-                            update="painelDetalhes" />
+                                styleClass="custom-autocomplete-left">
+                     
                 </p:autoComplete>
-
-                <!-- Card com a imagem e detalhes -->
-                <h:panelGroup id="painelDetalhes" 
-                              styleClass="book-card"
-                              rendered="#{acoesBean.livroCompleteSelecionado}">
-                    
-                    <!-- Imagem do Livro -->
-                    <img src="#{acoesBean.livroDetalhes.imagem}" 
-                         alt="Capa do Livro" 
-                         class="book-image" />
-
-                    <!-- Detalhes do Livro -->
-                    <div class="book-details">
-                        <h:outputText value="Título:" styleClass="label" />
-                        <h:outputText value="#{acoesBean.livroDetalhes.titulo}" />
-                        <br />
-                        <h:outputText value="Autor:" styleClass="label" />
-                        <h:outputText value="#{acoesBean.livroDetalhes.autor}" />
-                        <br />
-                        <h:outputText value="ISBN:" styleClass="label" />
-                        <h:outputText value="#{acoesBean.livroDetalhes.isbn}" />
-                        <br />
-                        <h:outputText value="Preço:" styleClass="label" />
-                        <h:outputText value="R$ #{acoesBean.livroDetalhes.preco}" />
-                    </div>
-                </h:panelGroup>
-            </div>
-        </div>
-    </h:panelGroup>
-</div>
-		
-       
- </div>     
     
-			
-	</h:form>
+    
+    </div>
+  </h:panelGroup>  
+  
+   
+    
+    </h:form>
 
+    <h:form id="formVendaLivros"> 
+
+    <!--  DataTable para Selecionar Livros -->
+    
+    <p:dataTable id="livrosTable" var="livro" value="#{acoesBean.livros}" widgetVar="livrosTable" rows="5"
+                 paginator="true" paginatorPosition="bottom"
+                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 currentPageReportTemplate="{startRecord} - {endRecord} de {totalRecords}"
+                 rowsPerPageTemplate="5,10,15"
+                 filteredValue="#{acoesBean.filteredLivros}"
+                 globalFilterFunction="#{acoesBean.globalFilterFunction}"
+                 emptyMessage="Nenhum livro encontrado"
+                 showGridlines="true">
+
+         <p:column headerText="Capa do Livro">
+                <div class="book-card">
+                    <p:graphicImage value="#{livro.imagem}" width="50"/>
+                </div>
+            </p:column>
+
+            <p:column headerText="Título" sortBy="#{livro.titulo}">
+                <h:outputText value="#{livro.titulo}"/>
+            </p:column>
+
+            <p:column  sortBy="#{livro.autor}">
+                <h:outputText value="#{livro.autor}"/>
+            </p:column>
+
+            <p:column headerText="ISBN" sortBy="#{livro.isbn}">
+                <h:outputText value="#{livro.isbn}"/>
+            </p:column>
+        
+            <p:column headerText="Preço" sortBy="#{livro.preco}">
+                <h:outputText value="#{livro.preco}" style="font-weight: 700;">
+                    <f:convertNumber type="currency" currencySymbol="R$" locale="pt_BR" maxFractionDigits="2" />
+                </h:outputText>
+            </p:column>
+                
+        
+        <!--  Botão para Adicionar ao Pedido -->
+        <p:column headerText="Ações">
+            <p:commandButton icon="pi pi-shopping-cart" styleClass="ui-button-success" 
+                             action="#{acoesBean.adicionarLivroAoPedido(livro)}"
+                             update="@form:panelPedido"/>
+        </p:column>
+
+    </p:dataTable>
+
+    <!--  Painel para Exibir o Pedido -->
+    <p:panel id="panelPedido" header="Resumo do Pedido" 
+             style="margin-top: 20px; display: #{empty acoesBean.pedido ? 'none' : 'block'};">
+        <p:dataTable id="tabelaPedido" var="livro" value="#{acoesBean.pedido}" rows="5"
+                     paginator="true" paginatorPosition="bottom"
+                     emptyMessage="Nenhum livro adicionado ao pedido.">
+
+            <p:column headerText="Título">
+                <h:outputText value="#{livro.titulo}"/>
+            </p:column>
+
+            <!--  Botão para Remover Livro do Pedido -->
+            <p:column headerText="Remover">
+                <p:commandButton icon="pi pi-times" styleClass="ui-button-danger"
+                                 action="#{acoesBean.removerLivroDoPedido(livro)}"
+                                 update="@form:panelPedido"/>
+            </p:column>
+
+        </p:dataTable>
+    </p:panel>
+
+</h:form>
+    
 
 </h:body>
 </html>

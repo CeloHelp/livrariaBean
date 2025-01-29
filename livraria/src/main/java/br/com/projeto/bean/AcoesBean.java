@@ -1,6 +1,7 @@
 package br.com.projeto.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -32,6 +33,7 @@ public class AcoesBean implements Serializable {
     private String tituloSelecionado;  // Título selecionado no autocomplete
     private LivroBean livroDetalhes; // Detalhes do livro selecionado
     private boolean livroCompleteSelecionado; // Flag para controle da exibição
+    private List <LivroBean> pedido = new ArrayList<>();
 
     @ManagedProperty(value = "#{livroBean}") // Injeção do LivroBean
     private LivroBean livroBean;
@@ -157,7 +159,9 @@ public class AcoesBean implements Serializable {
 		this.livroCompleteSelecionado = livroCompleteSelecionado;
 	}
     
-    
+	 public List<LivroBean> getPedido() {
+	        return pedido;
+	    }
 	
 
     // ---------- Métodos ----------
@@ -310,8 +314,18 @@ public class AcoesBean implements Serializable {
         System.out.println("Flag livroCompleteSelecionado: " + livroCompleteSelecionado);
     }
 
-
+   
+	public void adicionarLivroAoPedido(LivroBean livro) {
+		if (!pedido.contains(livro)) {
+			pedido.add(livro);
+			System.out.println("Livro Adicionado ao pedido: " + livro.getTitulo());
+		}
+	}
 	
+  public void removerLivroDoPedido(LivroBean livro) {
+	  pedido.remove(livro);
+	  System.out.println("Livro removido do pedido: " + livro.getTitulo());
+  }
     
   
     

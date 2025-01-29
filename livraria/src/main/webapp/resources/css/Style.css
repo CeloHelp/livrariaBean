@@ -159,6 +159,10 @@
 
 /* Estiliza o contêiner do autoComplete */
 .custom-autocomplete {
+	display: flex;
+	margin-bottom: 15px;
+	justify-content: flex-start;
+	align-items: center;
     width: 100%; /* Largura total */
     max-width: 400px; /* Largura máxima */
     margin: 0 auto; /* Centraliza o elemento */
@@ -241,6 +245,16 @@
     align-items: center;
     padding: 20px;
 }
+.custom-autocomplete-left{
+	
+	position: absolute; /* Fixa na tela */
+    left: 0; /* Alinha completamente à esquerda */
+    top: 40px; /* Define a distância do topo (ajuste conforme necessário) */
+    padding-left: 10px; /* Pequeno espaço da borda esquerda */
+}
+.custom-autocomplete-left{
+	width: 250px; /* Define um tamanho adequado */
+}
 
 /* Estilo geral do card */
 .book-card {
@@ -316,5 +330,18 @@
     margin-bottom: 15px; /* Espaço abaixo do título */
 }
 
-
+.pagina-inical-venda{
+	.custom-fixed-button {
+    position: fixed;
+    bottom: 20px; /* Distância do fundo da tela */
+    right: 20px; /* Distância da direita */
+    background-color: #28a745; /* Cor verde (pode mudar) */
+    color: white; /* Texto branco */
+    font-size: 16px;
+    padding: 10px 20px;
+    border-radius: 8px; /* Borda arredondada */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Sombra para destacar */
+}
+	
+}
 
