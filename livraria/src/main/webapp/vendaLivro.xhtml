@@ -30,7 +30,15 @@
                      
                 </p:autoComplete>
     
-    
+    <div style="position: relative; width: 100%;">
+        <p:commandButton value="Pagina Inicial" icon="pi pi-bookmark" styleClass="ui-button-primary"
+                         action="paginaInicial?faces-redirect=true"
+                         style="background-color: #43766C;
+                          position: absolute;
+                            right: 20px;
+                            top: 0;"
+                          />
+                         </div>
     </div>
   </h:panelGroup>  
   
@@ -39,18 +47,28 @@
     </h:form>
 
     <h:form id="formVendaLivros"> 
+    
+    
+   <p:inputText>
+          
+                
+   <p:ajax event="keyup"
+           listener="#{acoesBean.atualizarFiltro}"
+           update="livrosTable"
+           process="@this"/>
+   </p:inputText>
 
     <!--  DataTable para Selecionar Livros -->
     
-    <p:dataTable id="livrosTable" var="livro" value="#{acoesBean.livros}" widgetVar="livrosTable" rows="5"
-                 paginator="true" paginatorPosition="bottom"
-                 paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                 currentPageReportTemplate="{startRecord} - {endRecord} de {totalRecords}"
-                 rowsPerPageTemplate="5,10,15"
-                 filteredValue="#{acoesBean.filteredLivros}"
-                 globalFilterFunction="#{acoesBean.globalFilterFunction}"
-                 emptyMessage="Nenhum livro encontrado"
-                 showGridlines="true">
+    <p:dataTable id="livrosTable" var="livro" value="#{acoesBean.filteredLivros}" 
+             widgetVar="livrosTable" rows="5"
+             paginator="true" paginatorPosition="bottom"
+             paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+             currentPageReportTemplate="{startRecord} - {endRecord} de {totalRecords}"
+             rowsPerPageTemplate="5,10,15"
+             emptyMessage="Nenhum livro encontrado"
+             showGridlines="true">
+    
 
          <p:column headerText="Capa do Livro">
                 <div class="book-card">
@@ -58,23 +76,18 @@
                 </div>
             </p:column>
 
-            <p:column headerText="Título" sortBy="#{livro.titulo}">
-                <h:outputText value="#{livro.titulo}"/>
-            </p:column>
+          <p:column headerText="Título" sortBy="#{livro.titulo}" filterBy="#{livro.titulo}" filterMatchMode="contains">
+           <h:outputText value="#{livro.titulo}"/>
+           </p:column>
 
-            <p:column  sortBy="#{livro.autor}">
-                <h:outputText value="#{livro.autor}"/>
-            </p:column>
+           <p:column headerText="Autor" sortBy="#{livro.autor}" filterBy="#{livro.autor}" filterMatchMode="contains">
+            <h:outputText value="#{livro.autor}"/>
+           </p:column>
 
-            <p:column headerText="ISBN" sortBy="#{livro.isbn}">
-                <h:outputText value="#{livro.isbn}"/>
-            </p:column>
-        
-            <p:column headerText="Preço" sortBy="#{livro.preco}">
-                <h:outputText value="#{livro.preco}" style="font-weight: 700;">
-                    <f:convertNumber type="currency" currencySymbol="R$" locale="pt_BR" maxFractionDigits="2" />
-                </h:outputText>
-            </p:column>
+           <p:column headerText="ISBN" sortBy="#{livro.isbn}" filterBy="#{livro.isbn}" filterMatchMode="contains">
+           <h:outputText value="#{livro.isbn}"/>
+          </p:column>
+            
                 
         
         <!--  Botão para Adicionar ao Pedido -->
@@ -93,8 +106,18 @@
                      paginator="true" paginatorPosition="bottom"
                      emptyMessage="Nenhum livro adicionado ao pedido.">
 
+           
+           <p:column >
+           <div class="book-card">
+               <p:graphicImage value="#{livro.imagem}" width="70"/>
+               </div>
+            </p:column>
+            
             <p:column headerText="Título">
                 <h:outputText value="#{livro.titulo}"/>
+            </p:column>
+            <p:column headerText="ISBN">
+                <h:outputText value="#{livro.isbn}"/>
             </p:column>
 
             <!--  Botão para Remover Livro do Pedido -->

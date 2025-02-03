@@ -34,6 +34,7 @@ public class AcoesBean implements Serializable {
     private LivroBean livroDetalhes; // Detalhes do livro selecionado
     private boolean livroCompleteSelecionado; // Flag para controle da exibição
     private List <LivroBean> pedido = new ArrayList<>();
+    private String tituloFiltro;
 
     @ManagedProperty(value = "#{livroBean}") // Injeção do LivroBean
     private LivroBean livroBean;
@@ -62,7 +63,13 @@ public class AcoesBean implements Serializable {
         System.out.println("Nenhum livro encontrado no banco de dados.");
     } else {
         System.out.println("Livros carregados: " + livros.size());
+         } if(livros != null) {
+        	 filteredLivros = new ArrayList<>(livros);
+         } else {
+        	 filteredLivros = new ArrayList<>();
          }
+         
+         System.out.println("Livros carregados: " + (livros != null ? livros.size() : "NULO"));
     }
 
     // ---------- Getters e Setters ----------  
@@ -161,8 +168,21 @@ public class AcoesBean implements Serializable {
     
 	 public List<LivroBean> getPedido() {
 	        return pedido;
-	    }
+	}
 	
+     public String getTituloFiltro() {
+		    return tituloFiltro;
+    }
+
+	public void setTituloFiltro(String tituloFiltro) {
+		    this.tituloFiltro = tituloFiltro;
+	}
+	
+	public List<LivroBean> getFilteredLivros() {
+		System.out.println("chamando getFilteredLivros() - tamanho da lista: "
+				+ (filteredLivros != null ? filteredLivros.size() : "NULO"));
+        return filteredLivros;
+    }
 
     // ---------- Métodos ----------
     
@@ -327,7 +347,31 @@ public class AcoesBean implements Serializable {
 	  System.out.println("Livro removido do pedido: " + livro.getTitulo());
   }
     
-  
+  public boolean tituloFiltro(LivroBean livro, Object filter, Locale locale) {
+	  if (filter == null || filter.toString().trim().isEmpty()) {
+		   return true;
+	  }
+	  
+	  
+	  return(livro.getTitulo() != null && livro.getTitulo().toLowerCase().contains(tituloFiltro.toLowerCase()));
+	  
+  }
     
+  public void atualizarFiltro() {
+	  System.out.println("Filtro digitado: " + tituloFiltro);
+	  
+	  if (tituloFiltro == null || tituloFiltro.trim().isEmpty()) {
+		  filteredLivros = new ArrayList<>(livros);
+		  System.out.println("Nenhum filtro. Exibindo todos os livros");
+	  } else {
+		  String filtroLower = tituloFiltro.toLowerCase();
+		  filteredLivros = livros.stream()
+				  .filter(livro -> livro.getTitulo() != null &&
+				                   livro.getTitulo().toLowerCase().contains(filtroLower))
+				  .collect(Collectors.toList());
+		  
+		  System.out.println("Livros filtrados: " + filteredLivros.size());
+	  }
+  }
                                          
 }

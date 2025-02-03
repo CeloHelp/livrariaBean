@@ -257,14 +257,15 @@
 }
 
 /* Estilo geral do card */
+@media (max-width: 768px){
 .book-card {
     display: flex;
-    align-items: flex-start; /* Alinha itens no topo */
+    align-items: flex-end; /* Alinha itens no topo */
     gap: 30px; /* Espaçamento entre a imagem e os detalhes */
     background-color: #ffffff; /* Fundo branco */
     border: 1px solid #ddd; /* Borda leve */
     border-radius: 10px; /* Bordas arredondadas */
-    padding: 30px; /* Espaçamento interno */
+    padding: 10px; /* Espaçamento interno */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
     max-width: 800px; /* Largura máxima */
     margin: 20px auto; /* Centraliza o card */
@@ -275,7 +276,7 @@
 .book-image {
     width: 200px; /* Largura fixa */
     height: auto; /* Mantém a proporção */
-    border-radius: 8px; /* Bordas arredondadas */
+    border-radius: 5px; /* Bordas arredondadas */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra leve */
 }
 
@@ -286,8 +287,8 @@
     justify-content: space-between;
     font-size: 16px;
     line-height: 1.5;
+ }
 }
-
 /* Estilo para os rótulos */
 .label {
     font-weight: bold; /* Negrito */
@@ -306,22 +307,6 @@
     font-size: 14px; /* Tamanho da fonte */
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-    .book-card {
-        flex-direction: column; /* Empilha os elementos no card */
-        align-items: center; /* Centraliza o conteúdo */
-    }
-
-    .book-image {
-        width: 150px; /* Reduz a largura da imagem */
-        margin-bottom: 15px; /* Espaçamento inferior */
-    }
-
-    .book-details {
-        font-size: 14px; /* Reduz o tamanho do texto */
-    }
-}
 
 .titulo-livro {
     font-size: 1.8rem; /* Título maior */
