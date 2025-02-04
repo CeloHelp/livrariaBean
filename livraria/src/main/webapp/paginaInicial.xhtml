@@ -107,15 +107,23 @@
             <div>
             <p:commandButton value="Salvar Livro" icon="pi pi-bookmark"
                              style="background-color:  #43766C;
-                             margin-left: 530px;"
+                             margin-left: 520px;"
               action="#{acoesBean.acaoSalvar}" update="@form" process="@form" 
               oncomplete="if (args.validationFailed)  { PF('campoObrigatorioDialog').show('Não foi possível cadastrar o livro'); } else { alert('Livro Cadastrado com sucesso'); }" />
             
             
             <p:commandButton value="Seus Livros" icon="pi pi-heart"
-                             style="background-color:  #43766C;
+                             styleClass="ui-button-primary"
+                             style="background-color:  #43766C; margin-left: 10px;
                              "
-                             action="#{acoesBean.acaoProximaPagina}" immediate="true" />
+                             action="meusLivros?faces-redirect=true" immediate="true" />
+            
+            <p:commandButton 
+                                 value="Loja"
+                                 icon="pi pi-shopping-cart" 
+                                 styleClass="ui-button-primary" 
+                                 style="margin-left: 20px; background-color: #43766C; "
+                                 action="vendaLivro?faces-redirect=true" immediate="true"/>
             
             </div>
 

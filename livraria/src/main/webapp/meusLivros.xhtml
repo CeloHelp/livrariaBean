@@ -21,7 +21,7 @@
     <div>
         <p:commandButton value="Pagina Inicial" icon="pi pi-bookmark" styleClass="ui-button-primary"
                          action="paginaInicial?faces-redirect=true"
-                         type="button"
+                         
                          style="background-color: #43766C;
                          float: right;
                          margin-top: 20px;" />
@@ -84,12 +84,7 @@
                 <p:commandButton icon="pi pi-eye" styleClass="ui-button-warning" style="margin-left: 20px; background-color: #FF7F11; color: white;"
                                  action="#{acoesBean.acaoMaisDetalhes(livro.isbn)}"
                                  ajax="false" />
-               <p:commandButton 
-                                  
-                                 icon="pi pi-shopping-cart" 
-                                 styleClass="ui-button-primary" 
-                                 style="margin-left: 20px; background-color: #5B7645; "
-                                 action="vendaLivro?faces-redirect=true" />
+               
                
             </p:column>
         </p:dataTable>
