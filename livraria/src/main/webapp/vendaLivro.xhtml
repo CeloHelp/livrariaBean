@@ -13,40 +13,7 @@
     <h1 style="font-size: 2.5rem; color: #008080; text-align: center; letter-spacing: 0.4rem; font-family: 'Chakra Petch', sans-serif;">
         Compre e Venda Livros!
     </h1>
-    
-    <br/>
-    
-    <div style="position: relative; width: 100%;">
-        <p:commandButton value="Pagina Inicial" icon="pi pi-bookmark" styleClass="ui-button-primary"
-                         action="paginaInicial?faces-redirect=true"
-                         style="background-color: #43766C;
-                          position: absolute;
-                            right: 20px;
-                            top: 0;"
-                          />
-                         </div>
-    <br/>
-    <div>
-       <div>
-      <p:inputText style="position: absolute;
-                          right: 800px;
-                          bottom: 420px;
-                          max-width: 200px;"/>
-                          
-      <p:inputText style="position: absolute;
-                          right: 800px;
-                          bottom: 370px;
-                          max-width: 200px;"/>
-                          
-      <p:inputText style="position: absolute;
-                          right: 800px;
-                          bottom: 320px;
-                          max-width: 200px;"/>
-     
-     </div>
-    
-    </div>
-    
+
     <br/>
     <h:form id="cabecalho">
          <h:panelGroup>
@@ -62,40 +29,33 @@
                                 styleClass="custom-autocomplete-left">
                      
                 </p:autoComplete>
+               
+    <div>
+        <p:commandButton value="Pagina Inicial" icon="pi pi-bookmark" styleClass="ui-button-primary"
+                         action="paginaInicial?faces-redirect=true"
+                         
+                         style="background-color: #43766C;
+                         float: right;
+                         margin-top: 20px;" />
+                         </div>
+   
+    
     </div>
-
+    
+    <h:outputLabel></h:outputLabel>
   </h:panelGroup>  
   
+ 
    
     
     </h:form>
 
     <h:form id="formVendaLivros"> 
-     
-     
-    <br/>
-    <div>
-         <p:inputText style=" position: ;
-                              left: 30px;
-                              "/>
-     </div>
-    <br/>
-      
-      <div >
-                <p:inputText id="input1" 
-                 style="flex: 1; text-align: center; max-width: 200px; justify-content: space-between; gap: 20px;" />
-</div>
-    <br/> 
-       
     
-   <p:inputText>
-          
-                
-   <p:ajax event="keyup"
-           listener="#{acoesBean.atualizarFiltro}"
-           update="livrosTable"
-           process="@this"/>
-   </p:inputText>
+    
+   
+ 
+  
 
     <!--  DataTable para Selecionar Livros -->
     
@@ -126,7 +86,7 @@
            <p:column headerText="ISBN" sortBy="#{livro.isbn}" filterBy="#{livro.isbn}" filterMatchMode="contains">
            <h:outputText value="#{livro.isbn}"/>
           </p:column>
-           
+            
                 
         
         <!--  Botão para Adicionar ao Pedido -->
@@ -136,38 +96,33 @@
                              update="@form:panelPedido"/>
         </p:column>
 
-    
     </p:dataTable>
 
     <!--  Painel para Exibir o Pedido -->
     <p:panel id="panelPedido" header="Resumo do Pedido" 
              style="margin-top: 20px; display: #{empty acoesBean.pedido ? 'none' : 'block'};">
-             
-      <div style="position: relative;">
         <p:dataTable id="tabelaPedido" var="livro" value="#{acoesBean.pedido}" rows="5"
                      paginator="true" paginatorPosition="bottom"
                      emptyMessage="Nenhum livro adicionado ao pedido.">
-                     
-           
 
-           
-           <p:column >
-           <div class="book-card">
-               <p:graphicImage value="#{livro.imagem}" width="70"/>
-               </div>
+            
+            <p:column>
+               <div class="book-card">
+                <h:graphicImage value="#{livro.imagem}"/>
+                </div>
             </p:column>
             
             <p:column headerText="Título">
                 <h:outputText value="#{livro.titulo}"/>
             </p:column>
+            
             <p:column headerText="ISBN">
                 <h:outputText value="#{livro.isbn}"/>
             </p:column>
+            
             <p:column headerText="Preço">
-                <h:outputText value="R$ #{livro.preco}"/>
+                <h:outputText value="#{livro.preco}"/>
             </p:column>
-            
-            
 
             <!--  Botão para Remover Livro do Pedido -->
             <p:column headerText="Remover">
@@ -175,24 +130,8 @@
                                  action="#{acoesBean.removerLivroDoPedido(livro)}"
                                  update="@form:panelPedido"/>
             </p:column>
-            
-            
 
         </p:dataTable>
-        
-        
-         
-                <p:commandButton value="Finalizar Pedido" 
-                 icon="pi pi-check" 
-                 styleClass="ui-button-success"
-                 style="background-color: #28a745; padding: 10px 20px;
-                                position: absolute; bottom: 10px; right: 10px; z-index: 10;"
-                 
-                 update="@form"
-                 process="@form"
-                 oncomplete="PF('pedidoFinalizadoDialog').show();" />
-
-   </div>      
     </p:panel>
 
 </h:form>
